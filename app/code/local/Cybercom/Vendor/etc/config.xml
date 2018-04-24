@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+ 
+<config>
+    <modules>
+        <Cybercom_Vendor>
+            <version>1.0.2</version>
+        </Cybercom_Vendor>
+    </modules>
+ 
+    <global>
+        <models>
+            <cybercom_vendor>
+                <class>Cybercom_Vendor_Model</class>
+                <resourceModel>cybercom_vendor_mysql4</resourceModel>
+            </cybercom_vendor>
+            <cybercom_vendor_mysql4>
+                <class>Cybercom_Vendor_Model_Mysql4</class>
+                <entities>
+                    <vendordetail>
+                        <table>cybercom_vendor_vendordetail</table>
+                    </vendordetail>
+                </entities>
+            </cybercom_vendor_mysql4>             
+        </models>
+ 
+        <resources>
+            <cybercom_vendor_setup>
+                <setup>
+                    <module>Cybercom_Vendor</module>
+                </setup>
+            </cybercom_vendor_setup>
+        </resources>
+
+       
+ 
+        <blocks>
+            <cybercom_vendor>
+                <class>Cybercom_Vendor_Block</class>
+            </cybercom_vendor>
+        </blocks>
+ 
+        <helpers>
+            <cybercom_vendor>
+                <class>Cybercom_Vendor_Helper</class>
+            </cybercom_vendor>
+        </helpers>
+    </global>
+ 
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <cybercom_vendor before="Mage_Adminhtml">Cybercom_Vendor_Adminhtml</cybercom_vendor>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+</config>

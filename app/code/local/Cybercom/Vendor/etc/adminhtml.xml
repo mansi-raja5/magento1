@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+ 
+<config>
+    <menu>
+        <Cybercom module="cybercom_vendor">
+            <title>Cybercom</title>
+            <sort_order>90</sort_order>
+            <children>
+                <items module="cybercom_vendor">
+                    <title>Manage Vendors</title>
+                    <sort_order>0</sort_order>
+                    <action>adminhtml/vendors/</action>
+                </items>
+            </children>
+        </Cybercom>        
+    </menu>
+</config>
