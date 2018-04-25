@@ -9,7 +9,7 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Form extends Mage_Adminhtml_B
         
         parent::__construct();
      
-        $this->setId('cybercom_vendor_vendors_form');
+        $this->setId('cybercom_vendor_vendordetail_form');
         $this->setTitle($this->__('Vendor Information'));
     }  
      
@@ -51,7 +51,7 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Form extends Mage_Adminhtml_B
             'name'      => 'status',
             'label'     => Mage::helper('checkout')->__('Status'),
             'title'     => Mage::helper('checkout')->__('Status'),
-            'values' => array(0=>'Disabled',1 => 'Enabled'),
+            'values'    => array(0=>'Disabled',1 => 'Enabled'),
             'required'  => true,
             'after_element_html' => '<small>Enabled / Disabled </small>',       
             'tabindex' => 1   

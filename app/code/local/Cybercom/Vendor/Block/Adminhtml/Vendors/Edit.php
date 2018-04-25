@@ -12,9 +12,15 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit extends Mage_Adminhtml_Block_
         $this->_controller = 'adminhtml_vendors';
      
         parent::__construct();
-     
+        $this->setId('cybercom_vendor_vendordetail_edit');
         $this->_updateButton('save', 'label', $this->__('Save Vendor'));
         $this->_updateButton('delete', 'label', $this->__('Delete Vendor'));
+
+        // $this->_addButton('save_prices', array(
+        //     'label'     => Mage::helper('cybercom_vendor')->__('Save Prices'),
+        //     'onclick'   => "location.href='".$this->getUrl('*/*/custombutton')."'",
+        //     'class'     => '',
+        // ));       
     }  
      
     /**

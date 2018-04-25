@@ -3,7 +3,7 @@
 <config>
     <modules>
         <Cybercom_Vendor>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </Cybercom_Vendor>
     </modules>
  
@@ -19,6 +19,9 @@
                     <vendordetail>
                         <table>cybercom_vendor_vendordetail</table>
                     </vendordetail>
+                    <price>
+                        <table>cybercom_vendor_price</table>
+                    </price>
                 </entities>
             </cybercom_vendor_mysql4>             
         </models>
@@ -31,8 +34,6 @@
             </cybercom_vendor_setup>
         </resources>
 
-       
- 
         <blocks>
             <cybercom_vendor>
                 <class>Cybercom_Vendor_Block</class>
@@ -57,4 +58,28 @@
             </adminhtml>
         </routers>
     </admin>
+
+    <adminhtml>
+        <layout>
+            <updates>
+                <Cybercom_Vendor>
+                    <file>cybercom_vendor.xml</file>
+                </Cybercom_Vendor>
+            </updates>
+        </layout>
+    </adminhtml>
+
+    <adminhtml>
+        <events>
+            <adminhtml_widget_container_html_before>
+                <observers>
+                    <cybercom_vendors_observer>
+                        <type>singleton</type>
+                        <class>Cybercom_Vendor_Model_Observer</class>
+                        <method>addNewButton</method>
+                    </cybercom_vendors_observer>
+                </observers>
+            </adminhtml_widget_container_html_before>
+        </events>
+    </adminhtml>    
 </config>
