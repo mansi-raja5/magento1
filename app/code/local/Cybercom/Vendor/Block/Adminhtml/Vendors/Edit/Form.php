@@ -12,15 +12,25 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Form extends Mage_Adminhtml_B
                 )
                 );
 
-      $form->setUseContainer(true);
+      
+      //Set vendor Id for all tabs
+      if(Mage::registry('cybercom_vendor'))
+            $model = Mage::registry('cybercom_vendor');
+      else if (Mage::getSingleton('core/session')->getVendordata())
+        $model = Mage::getSingleton('core/session')->getVendordata();      
+      
       $this->setForm($form);
-
-      // $mansi = Mage::registry('cybercom_vendor');
-      // Mage::register('cybercom_vendor_again', "222");
-      // $mansi = Mage::registry('cybercom_vendor_again');
-      // echo "outer form";
-      //   echo "<pre>";
-      //   print_r($mansi);      
+      if ($model->getId()) {        
+          $form->addField('id', 'hidden', array(
+              'name' => 'id',
+          ));
+      } 
+      else
+        Mage::getSingleton('core/session')->setActiveTab('general_information');      
+      
+      $form->setValues($model->getData());
+      $form->setUseContainer(true);
+      $this->setForm($form);      
       return parent::_prepareForm();
   } 
 }

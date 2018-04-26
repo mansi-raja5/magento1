@@ -19,7 +19,7 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Tabs extends Mage_Adminhtml_B
             'title'=>Mage::helper('customer')->__('General Information'),
             'class' =>   'ajax',
             'url'   =>   $this->getUrl('*/*/custom',array('_current'=>true)),
-            'active'    => true
+            'active'    => Mage::getSingleton('core/session')->getActiveTab()=='general_information'?true:false
         ));
 
         $this->addTab('cybercom_vendor_price_grid',array(
@@ -27,7 +27,7 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Tabs extends Mage_Adminhtml_B
             'title'=>Mage::helper('cybercom_vendor')->__('Vendor Price'),
             'class' =>   'ajax',
             'url'=>$this->getUrl('*/*/vendorPrice', array('_current'=>true)),   
-                     
+             'active'    => Mage::getSingleton('core/session')->getActiveTab()=='cybercom_vendor_price_grid'?true:false         
         ));
        
         $this->_updateActiveTab();     

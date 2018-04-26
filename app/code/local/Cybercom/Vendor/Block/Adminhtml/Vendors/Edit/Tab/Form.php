@@ -6,7 +6,7 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Tab_Form extends Mage_Adminht
     {  
 
     	Mage::getSingleton('core/session')->setActiveTab('general_information');
-    	// echo Mage::getSingleton('core/session')->getActiveTab();
+
 		if(Mage::registry('cybercom_vendor'))
         	$model = Mage::registry('cybercom_vendor');
 		else if (Mage::getSingleton('core/session')->getVendordata())

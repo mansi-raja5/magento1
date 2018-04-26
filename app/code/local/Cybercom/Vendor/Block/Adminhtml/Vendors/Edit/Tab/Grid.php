@@ -11,6 +11,8 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Tab_Grid extends Mage_Adminht
         $this->setDefaultDir('asc');
         $this->setSaveParametersInSession(false);
         $this->setUseAjax(true);
+
+        Mage::getSingleton('core/session')->setActiveTab('cybercom_vendor_price_grid');
     }    
 
     /**
@@ -57,20 +59,24 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Tab_Grid extends Mage_Adminht
     {
 
         $collection = Mage::getResourceModel('catalog/product_collection')
-                    ->addAttributeToSelect('*')
-                    ->addAttributeToSort('created_at', 'desc');
-                    
+                    ->addAttributeToSelect('*');
+                    // ->addAttributeToSort('created_at', 'desc');
+        
+        // Grab data by join only if vendor is exist           
+        $vendorId = $this->getRequest()->getParam('id');
+        if(isset($vendorId) && $vendorId != '')
+        {                    
+            $collection->getSelect()
+                        //->reset(Zend_Db_Select::COLUMNS)
+                        //->columns('id as vendorMasterId')
+                        ->joinCross(array('cvv' => 'cybercom_vendor_vendordetail'),  array(''));
 
-        $collection->getSelect()
-                    //->reset(Zend_Db_Select::COLUMNS)
-                    //->columns('id as vendorMasterId')
-                    ->joinCross(array('cvv' => 'cybercom_vendor_vendordetail'),  array(''));
-
-        $collection->getSelect()
-                   ->joinLeft(array('vp' => 'cybercom_vendor_price'), 
-                        'vp.product_id = e.entity_id AND vp.vendor_id = cvv.id', 
-                        array('vendor_price'=>'vp.price'))
-                   ->where('cvv.id = '.$this->getRequest()->getParam('id'));
+            $collection->getSelect()
+                       ->joinLeft(array('cvp' => 'cybercom_vendor_price'), 
+                            'cvp.product_id = e.entity_id AND cvp.vendor_id = cvv.id', 
+                            array('vendor_price'=>'cvp.price','vendor_price_id'=>'cvp.entity_id'))
+                       ->where('cvv.id = '.$this->getRequest()->getParam('id'));
+        }
 
         //echo $collection->getSelect();exit;
         // echo "<pre>";
@@ -94,7 +100,6 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Tab_Grid extends Mage_Adminht
      
     protected function _prepareColumns()
     {
-
 		 	
         // Add the columns that should appear in the grid
         $this->addColumn('entity_id',
@@ -129,7 +134,7 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Tab_Grid extends Mage_Adminht
             )
         );  
 
-        $this->addColumn('vendor_price',
+        $this->addColumn('vendor_prices',
             array(
                 'header'        => $this->__('Vendor Price'),
                 'index'         => 'vendor_price',
@@ -152,11 +157,11 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Tab_Grid extends Mage_Adminht
         }
         if (empty($value)) {
             $this->getCollection()->getSelect()->where(
-                 "vp.price IS NULL");
+                 "cvp.price IS NULL");
         }
         else {
             $this->getCollection()->getSelect()->where(
-                 "vp.price=".$column->getFilter()->getValue());
+                 "cvp.price=".$column->getFilter()->getValue());
         }
 
         return $this;        

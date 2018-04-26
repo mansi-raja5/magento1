@@ -4,9 +4,19 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Pricetext extends Mage_Adminh
     public function render(Varien_Object $row)
     {
         $html = "";
+        
+        $productId 		= $row->getId();
+        $vendorPriceId 	= $row->getVendor_price_id();
+        $vendorPrice 	= $row->getVendor_price();
 
-        $html .= '<input type="number" min=0 step=".01" name="vendor_prices[]" value="'.$row->getVendor_price().'" class="input-text ">';
-        $html .= '<input type="hidden" name="vendor_product_ids[]" value="'.$row->getId().'" class="input-text ">';
+        //if($vendorPrice != "") 
+        $todo = "vendor_prices[insert][".$productId."]";
+        if(isset($vendorPriceId) && $vendorPriceId != '')  //Deside insert or update
+        	$todo = "vendor_prices[update][".$vendorPriceId."][".$productId."]";
+
+
+        $html .= '<input type="number" min=0 step=".01" name="'.$todo.'" value="'.$vendorPrice.'" class="input-text validate-number validate-vendor-price">';
+       // $html .= '<input type="hidden" name="vendor_product_ids[]" value="'.$row->getId().'" class="input-text ">';
 
          return $html;
     }

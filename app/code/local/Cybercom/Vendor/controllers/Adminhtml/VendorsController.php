@@ -20,6 +20,7 @@ class Cybercom_Vendor_Adminhtml_VendorsController extends Mage_Adminhtml_Control
      
     public function newAction()
     {  
+        Mage::getSingleton('core/session')->setActiveTab('general_information');         
         // We just forward the new action to a blank edit form
         $this->_forward('edit');
     }  
@@ -33,17 +34,19 @@ class Cybercom_Vendor_Adminhtml_VendorsController extends Mage_Adminhtml_Control
         $model = Mage::getModel('cybercom_vendor/vendordetail');
      
         if ($id) {
+
             // Load record
             $model->load($id);
      
             // Check if record is loaded
             if (!$model->getId()) {
                 Mage::getSingleton('adminhtml/session')->addError($this->__('This Vendor no longer exists.'));
-                $this->_redirect('*/*/');
-     
+                $this->_redirect('*/*/');     
                 return;
             }  
         }  
+
+        
      
         $this->_title($model->getId() ? $model->getName() : $this->__('New Vendor'));
      
@@ -67,68 +70,88 @@ class Cybercom_Vendor_Adminhtml_VendorsController extends Mage_Adminhtml_Control
     {
         // echo "<pre>";
         // print_r($this->getRequest()->getPost());
-        // exit;
+        //exit;
         if ($postData = $this->getRequest()->getPost()) {
             $model = Mage::getSingleton('cybercom_vendor/vendordetail');
             $model->setData($postData);
 
-            //print_r($postData);exit;            
+           
             try {
-                $resource       = Mage::getSingleton('core/resource');
-                $readConnection = $resource->getConnection('core_read');
-                $table          = $resource->getTableName('cybercom_vendor/price');
-
-
+                if($postData['name'] || $postData['status'])
+                    $model->save();  
+                
+                $resource           = Mage::getSingleton('core/resource');
+                $table              = $resource->getTableName('cybercom_vendor/price');
                 $insertSql          = "";
                 $updateSql          = "";
-                $updateProductIds   = "";
-                $updateVendorIds    = "";
-
-                foreach ($postData['vendor_prices'] as $key => $vendor_price) 
+                $updateEntityIds    = "";
+                $deleteEntityIds    = "";
+                $vendor_id  = $model->getId();
+                
+                
+                //Insert Vender_price entry code starts
+                $insertAry  = $postData['vendor_prices']['insert'];
+                if(isset($insertAry) && count($insertAry) > 0 )
                 {
-
-                    $product_id    = $postData['vendor_product_ids'][$key];
-                    $vendor_id     = $postData['id'];
-
-
-                    $query = 'SELECT entity_id FROM ' . $table .
-                                ' WHERE product_id = '. $product_id .
-                                ' AND vendor_id = '.$vendor_id.
-                                ' LIMIT 1';
-                        
-                    $entity_id = $readConnection->fetchOne($query); 
-
-                    if($vendor_price == "")
-                        $vendor_price = 'NULL';
-
-                    if(empty($entity_id) && $entity_id == ''){
-                        $insertSql .= "(".$product_id .",".$vendor_id .",".$vendor_price ."),";
-                    } else {
-                        $updateSql .= " WHEN  product_id = ".$product_id." AND vendor_id = ".$vendor_id ." THEN ".$vendor_price;
-                        $updateProductIds .= $product_id.',';
-                        $updateVendorIds .= $vendor_id.',';
-                    }        
-
-                }         
-                if($insertSql != '')
-                {
-                    $insertQuery = "INSERT INTO ".$table." (`product_id`, `vendor_id`, `price`) VALUES ".rtrim($insertSql,",");
-                    $readConnection->fetchOne($insertQuery);
+                    foreach ($insertAry as $product_id => $vendor_price) 
+                    {
+                        if($vendor_price != "")
+                            $insertSql .= "(".$product_id .",".$vendor_id .",".$vendor_price ."),";
+                    }                                      
                 }
-                else if($updateSql != '' && $updateVendorIds != '' && $updateProductIds != '')
+
+                //Update Vender_price code starts
+                $updateAry  = $postData['vendor_prices']['update'];
+                if(isset($updateAry) && count($updateAry) > 0 )
                 {
-                    $updateQuery = "UPDATE  cybercom_vendor_price 
+
+                    foreach ($updateAry as $entityId => $vendorPriceAry) 
+                    {
+                        $vendorPrice = reset($vendorPriceAry);  // Gives you first element of array
+
+                        if($vendorPrice == "")  //set null price when blank is passed
+                            $deleteEntityIds .= $entityId.','; 
+                        else{
+                            $updateSql .= " WHEN  entity_id = ".$entityId." THEN ".$vendorPrice;
+                            $updateEntityIds .= $entityId.',';       
+                            }                 
+                    }                                      
+                }   
+
+                $runQuery = ""; 
+                if($insertSql != ''){
+
+                    $runQuery  .= "INSERT INTO ".$table." (`product_id`, `vendor_id`, `price`) VALUES ".rtrim($insertSql,",").";";
+                }
+                if($updateSql != ''){
+                    $runQuery .= "UPDATE  cybercom_vendor_price 
                                     SET  price = CASE 
                                                     ".$updateSql."
                                                  END
-                                    WHERE product_id IN (".rtrim($updateProductIds,',').")
-                                    AND vendor_id IN (".rtrim($updateVendorIds,',').")";
-                    $readConnection->fetchOne($updateQuery);
-                }
+                                    WHERE entity_id IN (".rtrim($updateEntityIds,',').");";
+                }  
+                if($deleteEntityIds != ''){
+                     $runQuery .= "DELETE FROM ".$table." WHERE `entity_id` IN (".rtrim($deleteEntityIds,',').");"; 
+                }   
+                if($runQuery != "")
+                {                    
 
-            
-                $model->save();              
- 
+                    $writeConnection = $resource->getConnection('core_write');                    
+                    $writeConnection->query($runQuery);
+                //echo $runQuery;exit;
+                    
+                }
+                                      
+                if ($this->getRequest()->getParam('back')) {
+                    $this->_redirect(
+                        '*/*/edit',
+                        array(
+                            'id' => $model->getId(),
+                            'store' => $sStoreId
+                        )
+                    );
+                    return;
+                }                
                 Mage::getSingleton('adminhtml/session')->addSuccess($this->__('The vendor has been saved.'));
                 $this->_redirect('*/*/');
  
