@@ -66,10 +66,7 @@
                     <file>cybercom_vendor.xml</file>
                 </Cybercom_Vendor>
             </updates>
-        </layout>
-    </adminhtml>
-
-    <adminhtml>
+        </layout>        
         <events>
             <adminhtml_widget_container_html_before>
                 <observers>

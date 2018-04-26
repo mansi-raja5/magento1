@@ -47,15 +47,16 @@ class Cybercom_Vendor_Adminhtml_VendorsController extends Mage_Adminhtml_Control
      
         $this->_title($model->getId() ? $model->getName() : $this->__('New Vendor'));
      
-        $data = Mage::getSingleton('adminhtml/session')->getBazData(true);
+        $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
         if (!empty($data)) {
             $model->setData($data);
         }  
      
         Mage::register('cybercom_vendor', $model);
+        Mage::getSingleton('core/session')->setVendordata($model);
         $this->_initAction()
             ->_addBreadcrumb($id ? $this->__('Edit Vendor') : $this->__('New Vendor'), $id ? $this->__('Edit Vendor') : $this->__('New Vendor'))
-            ->_addContent($this->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit')->setData('action', $this->getUrl('*/*/save')))
+            ->_addContent($this->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit'))
             ->_addLeft($this->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit_tabs'))
             ->renderLayout();        
      
@@ -64,43 +65,51 @@ class Cybercom_Vendor_Adminhtml_VendorsController extends Mage_Adminhtml_Control
      
     public function saveAction()
     {
+        // echo "<pre>";
+        // print_r($this->getRequest()->getPost());
+        // exit;
         if ($postData = $this->getRequest()->getPost()) {
             $model = Mage::getSingleton('cybercom_vendor/vendordetail');
             $model->setData($postData);
 
             //print_r($postData);exit;            
             try {
-                $resource = Mage::getSingleton('core/resource');
+                $resource       = Mage::getSingleton('core/resource');
                 $readConnection = $resource->getConnection('core_read');
-                $table = $resource->getTableName('cybercom_vendor/price');
-                $productId = 3;
+                $table          = $resource->getTableName('cybercom_vendor/price');
+
 
                 $insertSql          = "";
                 $updateSql          = "";
                 $updateProductIds   = "";
                 $updateVendorIds    = "";
 
-                foreach ($postData['vendor_prices'] as $key => $vendor_price) {
-                    $priceData['product_id']    = $postData['vendor_product_ids'][$key];
-                    $priceData['vendor_id']     = $postData['id'];
-                    $priceData['price']         = $vendor_price;
+                foreach ($postData['vendor_prices'] as $key => $vendor_price) 
+                {
+
+                    $product_id    = $postData['vendor_product_ids'][$key];
+                    $vendor_id     = $postData['id'];
+
 
                     $query = 'SELECT entity_id FROM ' . $table .
-                                ' WHERE product_id = '. $priceData['product_id'] .
-                                ' AND vendor_id = '.$priceData['vendor_id'].
+                                ' WHERE product_id = '. $product_id .
+                                ' AND vendor_id = '.$vendor_id.
                                 ' LIMIT 1';
                         
                     $entity_id = $readConnection->fetchOne($query); 
 
-                    
+                    if($vendor_price == "")
+                        $vendor_price = 'NULL';
+
                     if(empty($entity_id) && $entity_id == ''){
-                        $insertSql .= "(".$priceData['product_id'] .",".$priceData['vendor_id'] .",".$priceData['price'] ."),";
+                        $insertSql .= "(".$product_id .",".$vendor_id .",".$vendor_price ."),";
                     } else {
-                        $updateSql .= " WHEN  product_id = ".$priceData['product_id']." AND vendor_id = ".$priceData['vendor_id'] ." THEN ".$priceData['price'];
-                        $updateProductIds .= $priceData['product_id'].',';
-                        $updateVendorIds .= $priceData['vendor_id'].',';
-                    }                          
-                }           
+                        $updateSql .= " WHEN  product_id = ".$product_id." AND vendor_id = ".$vendor_id ." THEN ".$vendor_price;
+                        $updateProductIds .= $product_id.',';
+                        $updateVendorIds .= $vendor_id.',';
+                    }        
+
+                }         
                 if($insertSql != '')
                 {
                     $insertQuery = "INSERT INTO ".$table." (`product_id`, `vendor_id`, `price`) VALUES ".rtrim($insertSql,",");
@@ -147,7 +156,6 @@ class Cybercom_Vendor_Adminhtml_VendorsController extends Mage_Adminhtml_Control
 
         try {
             if ($id) {
-
                 //Delete record from Vendor Table
                 $model->load($id);
                 $model->delete();  
@@ -238,9 +246,27 @@ class Cybercom_Vendor_Adminhtml_VendorsController extends Mage_Adminhtml_Control
         echo $data->getContent();
     }
      
+    public function vendorDetailsAction(){
+        $this->getResponse()->setBody(
+            $this->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit')
+            ->setUseAjax(true)
+            ->setData('action', $this->getUrl('*/*/save'))
+        );
+    } 
+    public function customAction()
+    {
+
+        $this->getResponse()->setBody(
+            $this->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit_tab_form')
+            ->setUseAjax(true)
+            ->toHtml()
+        );
+    }
     public function vendorPriceAction(){
         $this->getResponse()->setBody(
-            Mage::app()->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit_tab_grid')->toHtml()
+            $this->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit_tab_grid')
+            ->setUseAjax(true)
+            ->toHtml()
         );
     }
     public function gridPriceAction()
@@ -250,12 +276,6 @@ class Cybercom_Vendor_Adminhtml_VendorsController extends Mage_Adminhtml_Control
                $this->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit_tab_grid')->toHtml()
         );
     }    
-
-    public function vendorDetailsAction(){
-        $this->getResponse()->setBody(
-            Mage::app()->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit')->setData('action', $this->getUrl('*/*/save'))
-        );
-    } 
 
     /**
      * Initialize action

@@ -144,7 +144,9 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Tab_Grid extends Mage_Adminht
 
     public function _priceFilter($collection,$column)
     {
-
+        // $filterValue = $column->getFilter()->getValue();
+        // $collection->getSelect()->where("vendor_price =".$filterValue);
+        // return $this;
         if (!$value = $column->getFilter()->getValue()) {
             return $this;
         }

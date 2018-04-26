@@ -13,30 +13,30 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Tabs extends Mage_Adminhtml_B
 
     protected function _beforeToHtml()
     {
-        $this->addTab('cybercom_vendor_vendordetail_edit', array(
-            'label' => Mage::helper('cybercom_vendor')->__('General Information'),
-            'title' => Mage::helper('cybercom_vendor')->__('General Information'),
+
+        $this->addTab('general_information',array(
+            'label' =>Mage::helper('customer')->__('General Information'),
+            'title'=>Mage::helper('customer')->__('General Information'),
             'class' =>   'ajax',
-            'url'=>$this->getUrl('*/*/vendorDetails', array('_current'=>true)),
+            'url'   =>   $this->getUrl('*/*/custom',array('_current'=>true)),
             'active'    => true
-            //'content' => $this->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit')->setData('action', $this->getUrl('*/*/save')),
         ));
-
-
 
         $this->addTab('cybercom_vendor_price_grid',array(
             'label'=>Mage::helper('cybercom_vendor')->__('Vendor Price'),
             'title'=>Mage::helper('cybercom_vendor')->__('Vendor Price'),
             'class' =>   'ajax',
-            'url'=>$this->getUrl('*/*/vendorPrice', array('_current'=>true)),
-
+            'url'=>$this->getUrl('*/*/vendorPrice', array('_current'=>true)),   
+                     
         ));
+       
+        $this->_updateActiveTab();     
         return parent::_beforeToHtml();
 
 
     }
 
-   /* protected function _updateActiveTab()
+    protected function _updateActiveTab()
     {
         $tabId = $this->getRequest()->getParam('tab');
         if( $tabId ) {
@@ -45,5 +45,5 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Tabs extends Mage_Adminhtml_B
                 $this->setActiveTab($tabId);
             }
         }
-    }*/
+    }
 }
