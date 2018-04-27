@@ -6,7 +6,7 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Edit_Tab_Grid extends Mage_Adminht
         parent::__construct();
          
         // Set some defaults for our grid
-        $this->setDefaultSort('id');
+        $this->setDefaultSort('entity_id');
         $this->setId('cybercom_vendor_price_grid');
         $this->setDefaultDir('asc');
         $this->setSaveParametersInSession(false);

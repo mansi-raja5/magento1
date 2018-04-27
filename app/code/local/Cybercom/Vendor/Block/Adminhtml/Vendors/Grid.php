@@ -90,6 +90,10 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Grid extends Mage_Adminhtml_Block_
             )
         );        
          
+        $this->addExportType('*/*/exportCsv', Mage::helper('cybercom_vendor')->__('CSV'));
+        $this->addExportType('*/*/exportXml', Mage::helper('cybercom_vendor')->__('XML')); 
+        $this->addExportType('*/*/exportExcel',Mage::helper('cybercom_vendor')->__('EXCEL'));
+        
         return parent::_prepareColumns();
     }
      
@@ -98,4 +102,5 @@ class Cybercom_Vendor_Block_Adminhtml_Vendors_Grid extends Mage_Adminhtml_Block_
         // This is where our row data will link to
         return $this->getUrl('*/*/edit', array('id' => $row->getId()));
     }
+
 }

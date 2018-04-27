@@ -1,8 +1,39 @@
 <?php
 class Cybercom_Vendor_Adminhtml_VendorsController extends Mage_Adminhtml_Controller_Action
 {
-    public function indexAction()
+    /**
+     * Initialize action
+     *
+     * Here, we set the breadcrumbs and the active menu
+     *
+     * @return Mage_Adminhtml_Controller_Action
+     */
+    protected function _initAction()
     {
+
+        $this->loadLayout()
+            // Make the active menu match the menu config nodes (without 'children' inbetween)
+            ->_setActiveMenu('Cybercom/items')
+            ->_title($this->__('Sales'))->_title($this->__('Vendor'))
+            ->_addBreadcrumb($this->__('Sales'), $this->__('Sales'))
+            ->_addBreadcrumb($this->__('Vendor'), $this->__('Vendor'));
+         
+        return $this;
+    }
+     
+    /**
+     * Check currently called action by permissions for current user
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return true;
+    }
+
+    
+    public function indexAction()
+    {    
         $this->_title($this->__('Sales'))->_title($this->__('Cybercom Vendor'));
         $this->loadLayout()
                 ->_initAction()
@@ -27,8 +58,8 @@ class Cybercom_Vendor_Adminhtml_VendorsController extends Mage_Adminhtml_Control
      
     public function editAction()
     {  
-        $this->_initAction();
-     
+        //$this->_initAction();
+
         // Get id if available
         $id  = $this->getRequest()->getParam('id');
         $model = Mage::getModel('cybercom_vendor/vendordetail');
@@ -40,6 +71,7 @@ class Cybercom_Vendor_Adminhtml_VendorsController extends Mage_Adminhtml_Control
      
             // Check if record is loaded
             if (!$model->getId()) {
+                    
                 Mage::getSingleton('adminhtml/session')->addError($this->__('This Vendor no longer exists.'));
                 $this->_redirect('*/*/');     
                 return;
@@ -57,11 +89,15 @@ class Cybercom_Vendor_Adminhtml_VendorsController extends Mage_Adminhtml_Control
      
         Mage::register('cybercom_vendor', $model);
         Mage::getSingleton('core/session')->setVendordata($model);
-        $this->_initAction()
-            ->_addBreadcrumb($id ? $this->__('Edit Vendor') : $this->__('New Vendor'), $id ? $this->__('Edit Vendor') : $this->__('New Vendor'))
-            ->_addContent($this->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit'))
-            ->_addLeft($this->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit_tabs'))
-            ->renderLayout();        
+        //$this->_initAction()
+        $this->loadLayout();
+        $this->_addBreadcrumb($id ? $this->__('Edit Vendor') : $this->__('New Vendor'), $id ? $this->__('Edit Vendor') : $this->__('New Vendor'));
+
+        $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
+
+        $this->_addContent($this->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit'));
+        $this->_addLeft($this->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit_tabs'));
+        $this->renderLayout();        
      
 
     }  
@@ -135,24 +171,17 @@ class Cybercom_Vendor_Adminhtml_VendorsController extends Mage_Adminhtml_Control
                 }   
                 if($runQuery != "")
                 {                    
-
                     $writeConnection = $resource->getConnection('core_write');                    
-                    $writeConnection->query($runQuery);
-                //echo $runQuery;exit;
-                    
+                    $writeConnection->query($runQuery);                   
                 }
+
+                Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('cybercom_vendor')->__('Vendor was successfully saved'));
+                //Mage::getSingleton('adminhtml/session')->setFormData(false);
                                       
                 if ($this->getRequest()->getParam('back')) {
-                    $this->_redirect(
-                        '*/*/edit',
-                        array(
-                            'id' => $model->getId(),
-                            'store' => $sStoreId
-                        )
-                    );
+                    $this->_redirect('*/*/edit',array('id' => $model->getId()));
                     return;
                 }                
-                Mage::getSingleton('adminhtml/session')->addSuccess($this->__('The vendor has been saved.'));
                 $this->_redirect('*/*/');
  
                 return;
@@ -298,37 +327,13 @@ class Cybercom_Vendor_Adminhtml_VendorsController extends Mage_Adminhtml_Control
         $this->getResponse()->setBody(
                $this->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit_tab_grid')->toHtml()
         );
-    }    
+    }   
 
-    /**
-     * Initialize action
-     *
-     * Here, we set the breadcrumbs and the active menu
-     *
-     * @return Mage_Adminhtml_Controller_Action
-     */
-    protected function _initAction()
-    {
-        $this->loadLayout()
-            // Make the active menu match the menu config nodes (without 'children' inbetween)
-            ->_setActiveMenu('Cybercom/items')
-            ->_title($this->__('Sales'))->_title($this->__('Vendor'))
-            ->_addBreadcrumb($this->__('Sales'), $this->__('Sales'))
-            ->_addBreadcrumb($this->__('Vendor'), $this->__('Vendor'));
-         
-        return $this;
+    public function exportCsvAction(){
+        $fileName   = 'vendorDetails.csv'; 
+        $content    = $this->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_gridexport')->getCsvFile(); 
+        //$content    = $this->getLayout()->createBlock('cybercom_vendor/adminhtml_vendors_edit_tab_grid');  
+          
+        $this->_prepareDownloadResponse($fileName, $content); 
     }
-     
-    /**
-     * Check currently called action by permissions for current user
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return Mage::getSingleton('admin/session')->isAllowed('sales/cybercom_vendor');
-    }
-
-
-
 }

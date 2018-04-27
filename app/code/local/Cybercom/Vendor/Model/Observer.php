@@ -8,7 +8,7 @@ class Cybercom_Vendor_Model_Observer
         // exit;
         if(null !== $container && $container->getType() == 'cybercom_vendor/adminhtml_vendors') {
             $data = array(
-                'label'     => 'Mansi',
+                'label'     => 'Button added via Observer',
                 'class'     => '',
                 'onclick'   => 'setLocation(\''  . Mage::helper('adminhtml')->getUrl('companymodule/adminhtml_controller/action') . '\')',
             );
