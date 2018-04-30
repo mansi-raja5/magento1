@@ -40,3 +40,9 @@
 !/var/package
 /var/package/*
 !/var/package/*.xml
+
+
+/app/code/community/*
+/app/code/core/*
+media/*
+var/*
