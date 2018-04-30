@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_vendors>
+        <reference name="left">
+            <action method="addTab">
+                <name>my_custom_tab</name>
+                <block>cybercom_vendor/adminhtml_vendors_edit_tab_grid</block>
+            </action>
+        </reference>
+    </adminhtml_vendors>
+    <adminhtml_vendors_edit>
+    	<reference name="head">
+	        <action method="addJs"><script>cybercom_vendor/custom-validate.js</script></action>
+	    </reference>        
+    </adminhtml_vendors_edit>
+</layout>
