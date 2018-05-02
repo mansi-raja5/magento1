@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+ 
+<config>
+    <menu>
+        <Cybercom module="cybercom_banner">
+            <children>
+                <banner module="cybercom_banner">
+                    <title>Manage Banners</title>
+                    <sort_order>5</sort_order>
+                    <action>adminhtml/banners/</action>
+                </banner>
+                <bannergroup module="cybercom_banner">
+                    <title>Manage Bannergroups</title>
+                    <sort_order>5</sort_order>
+                    <action>adminhtml/bannergroups/</action>
+                </bannergroup>                
+            </children>            
+        </Cybercom>        
+    </menu>
+</config>

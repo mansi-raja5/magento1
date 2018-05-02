@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+
+<config>
+	<modules>
+        <Cybercom_Banner>
+            <version>1.0.1</version>
+        </Cybercom_Banner>
+    </modules>
+    <global>
+        <models>
+            <cybercom_banner>
+                <class>Cybercom_Banner_Model</class>
+                <resourceModel>cybercom_banner_mysql4</resourceModel>
+            </cybercom_banner>
+            <cybercom_banner_mysql4>
+                <class>Cybercom_Banner_Model_Mysql4</class>
+                <entities>
+                    <bannerdetail>
+                        <table>cybercom_banner_bannerdetail</table>
+                    </bannerdetail>
+                    <bannergroup>
+                        <table>cybercom_banner_bannergroup</table>
+                    </bannergroup>                    
+                </entities>
+            </cybercom_banner_mysql4>             
+        </models>   
+
+        <resources>
+            <cybercom_banner_setup>
+                <setup>
+                    <module>Cybercom_Banner</module>
+                </setup>
+            </cybercom_banner_setup>
+        </resources>
+
+        <blocks>
+            <cybercom_banner>
+                <class>Cybercom_Banner_Block</class>
+            </cybercom_banner>
+        </blocks>    	
+        <helpers>
+            <cybercom_banner>
+                <class>Cybercom_Banner_Helper</class>
+            </cybercom_banner>
+        </helpers>
+    </global>    
+    <frontend>
+    	<routers>
+    		<routerF>
+    			<use>standard</use>
+    			<args>
+    				<module>Cybercom_Banner</module>
+    				<frontName>banner</frontName>
+    			</args>
+    		</routerF>
+    	</routers>
+    </frontend>
+    <admin>
+    	<routers>
+    		<adminhtml>
+    			<args>
+    				<modules>
+    					<cybercom_banner before="Mage_Adminhtml">Cybercom_Banner_Adminhtml</cybercom_banner>
+    				</modules>
+    			</args>
+    		</adminhtml>
+    	</routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <Cybercom_Banner>
+                    <file>cybercom_banner.xml</file>
+                </Cybercom_Banner>
+            </updates>
+        </layout>        
+    </adminhtml>    
+
+    <!-- <adminhtml>
+    	<layout>
+    		<updates>
+    			<
+    		</updates>
+    	</layout>
+    </adminhtml> -->
+</config>
