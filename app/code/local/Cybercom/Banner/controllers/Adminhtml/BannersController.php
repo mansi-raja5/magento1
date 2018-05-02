@@ -13,8 +13,8 @@ class cybercom_banner_Adminhtml_BannersController extends Mage_Adminhtml_Control
         $this->loadLayout()
             // Make the active menu match the menu config nodes (without 'children' inbetween)
             ->_setActiveMenu('Cybercom/items')
-            ->_title($this->__('Sales'))->_title($this->__('Banner'))
-            ->_addBreadcrumb($this->__('Sales'), $this->__('Sales'))
+            ->_title($this->__('Cybercom'))->_title($this->__('Banner'))
+            ->_addBreadcrumb($this->__('Cybercom'), $this->__('Cybercom'))
             ->_addBreadcrumb($this->__('Banner'), $this->__('Banner'));
          
         return $this;
@@ -33,7 +33,7 @@ class cybercom_banner_Adminhtml_BannersController extends Mage_Adminhtml_Control
     
     public function indexAction()
     {    
-        $this->_title($this->__('Sales'))->_title($this->__('Cybercom Banner'));
+        $this->_title($this->__('Cybercom'))->_title($this->__('Cybercom Banner'));
         $this->loadLayout()
                 ->_initAction()
                 ->_addContent($this->getLayout()->createBlock('cybercom_banner/adminhtml_banners'))

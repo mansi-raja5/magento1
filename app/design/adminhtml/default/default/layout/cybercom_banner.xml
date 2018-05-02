@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_cybercom_banner_bannergroup_categories>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="cybercom_banner/adminhtml_bannergroup_edit_tab_categories" name="bannergroup.edit.tab.categories"/>
+        </block>
+    </adminhtml_cybercom_banner_bannergroup_categories>
+</layout>
