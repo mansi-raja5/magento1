@@ -1,7 +1,6 @@
 <?php
 class Cybercom_Banner_Block_Adminhtml_Banners_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
 {
-
     protected function _prepareForm()
     {  
 

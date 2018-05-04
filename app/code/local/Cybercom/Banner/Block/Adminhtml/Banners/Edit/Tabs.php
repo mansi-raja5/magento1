@@ -15,20 +15,20 @@ class Cybercom_Banner_Block_Adminhtml_Banners_Edit_Tabs extends Mage_Adminhtml_B
     {
 
         $this->addTab('general_information',array(
-            'label' =>Mage::helper('customer')->__('General Information'),
-            'title'=>Mage::helper('customer')->__('General Information'),
-            'class' =>   'ajax',
-            'url'   =>   $this->getUrl('*/*/custom',array('_current'=>true)),
+            'label'     => Mage::helper('customer')->__('General Information'),
+            'title'     => Mage::helper('customer')->__('General Information'),
+            'class'     => 'ajax',
+            'url'       => $this->getUrl('*/*/general',array('_current'=>true)),
             'active'    => Mage::getSingleton('core/session')->getActiveTab()=='general_information'?true:false
         ));
 
-        // $this->addTab('cybercom_vendor_price_grid',array(
-        //     'label'=>Mage::helper('cybercom_banner')->__('Vendor Price'),
-        //     'title'=>Mage::helper('cybercom_banner')->__('Vendor Price'),
-        //     'class' =>   'ajax',
-        //     'url'=>$this->getUrl('*/*/vendorPrice', array('_current'=>true)),   
-        //      'active'    => Mage::getSingleton('core/session')->getActiveTab()=='cybercom_vendor_price_grid'?true:false         
-        // ));
+        $this->addTab('banner_groups',array(
+            'label'     => Mage::helper('cybercom_banner')->__('Banner Groups'),
+            'title'     => Mage::helper('cybercom_banner')->__('Banner Groups'),
+            'class'     => 'ajax',
+            'url'       => $this->getUrl('*/*/bannergroup', array('_current'=>true)),   
+            'active'    => Mage::getSingleton('core/session')->getActiveTab()=='banner_groups'?true:false         
+        ));
        
         $this->_updateActiveTab();     
         return parent::_beforeToHtml();

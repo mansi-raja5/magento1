@@ -319,28 +319,41 @@ class cybercom_banner_Adminhtml_BannersController extends Mage_Adminhtml_Control
             ->setData('action', $this->getUrl('*/*/save'))
         );
     } 
-    public function customAction()
-    {
 
+    public function generalAction()
+    {
         $this->getResponse()->setBody(
             $this->getLayout()->createBlock('cybercom_banner/adminhtml_Banners_edit_tab_form')
             ->setUseAjax(true)
             ->toHtml()
         );
     }
-    public function BannerPriceAction(){
+    public function bannergroupAction(){
+        $this->_initGroups();
         $this->getResponse()->setBody(
-            $this->getLayout()->createBlock('cybercom_banner/adminhtml_Banners_edit_tab_grid')
+            $this->getLayout()->createBlock('cybercom_banner/adminhtml_Banners_edit_tab_groups')
             ->setUseAjax(true)
             ->toHtml()
         );
     }
-    public function gridPriceAction()
-    {
-        $this->loadLayout();
+    public function categoriesJsonAction(){
+        $this->_initGroups();
         $this->getResponse()->setBody(
-               $this->getLayout()->createBlock('cybercom_banner/adminhtml_Banners_edit_tab_grid')->toHtml()
+            $this->getLayout()->createBlock('cybercom_banner/adminhtml_Banners_edit_tab_groups')
+                ->getCategoryChildrenJson($this->getRequest()->getParam('category'))
         );
+    }    
+ 
+
+    protected function _initGroups(){
+        $bannerId           = (int) $this->getRequest()->getParam('banner_id');
+        $bannerdetailModel  = Mage::getModel('cybercom_banner/bannerdetail');
+
+        if ($bannerId) {
+            $bannerdetailModel->load($bannerId);
+        }
+        Mage::register('current_Groups', $bannerdetailModel);
+        return $bannerdetailModel;
     }   
 
     public function exportCsvAction(){
