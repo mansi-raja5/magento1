@@ -61,15 +61,15 @@ class cybercom_banner_Adminhtml_BannersController extends Mage_Adminhtml_Control
 
         // Get id if available
         $bannerId  = $this->getRequest()->getParam('banner_id');
-        $model = Mage::getModel('cybercom_banner/bannerdetail');
+        $bannerModel = Mage::getModel('cybercom_banner/bannerdetail');
      
         if ($bannerId) {
 
             // Load record
-            $model->load($bannerId);
+            $bannerModel->load($bannerId);
      
             // Check if record is loaded
-            if (!$model->getId()) {
+            if (!$bannerModel->getId()) {
                     
                 Mage::getSingleton('adminhtml/session')->addError($this->__('This Banner no longer exists.'));
                 $this->_redirect('*/*/');     
@@ -79,15 +79,15 @@ class cybercom_banner_Adminhtml_BannersController extends Mage_Adminhtml_Control
 
         
      
-        $this->_title($model->getId() ? $model->getName() : $this->__('New Banner'));
+        $this->_title($bannerModel->getId() ? $bannerModel->getName() : $this->__('New Banner'));
      
         $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
         if (!empty($data)) {
-            $model->setData($data);
+            $bannerModel->setData($data);
         }  
      
-        Mage::register('cybercom_banner', $model);
-        Mage::getSingleton('core/session')->setBannerdata($model);
+        Mage::register('cybercom_banner', $bannerModel);
+        Mage::getSingleton('core/session')->setBannerdata($bannerModel);
         //$this->_initAction()
         $this->loadLayout();
         $this->_addBreadcrumb($id ? $this->__('Edit Banner') : $this->__('New Banner'), $id ? $this->__('Edit Banner') : $this->__('New Banner'));
@@ -102,7 +102,7 @@ class cybercom_banner_Adminhtml_BannersController extends Mage_Adminhtml_Control
      
     public function saveAction()
     {
-        //echo "<pre>";
+        // echo "<pre>";
         // print_r($this->getRequest()->getPost());
         // print_r($_FILES['image']);
         // exit;
@@ -110,16 +110,18 @@ class cybercom_banner_Adminhtml_BannersController extends Mage_Adminhtml_Control
         {
             try 
             {
-                $model = Mage::getSingleton('cybercom_banner/bannerdetail');
+                $bannerModel = Mage::getSingleton('cybercom_banner/bannerdetail');
                 if($postData)
                 {
+                    //Delete Image when selected checkbox
                     $imgAry = $postData['image'];
-
                     if(isset($imgAry['value']))
-                        $postData['image'] = $imgAry['value'];
+                        $postData['image'] = $imgAry['value'];  //Get Image Name
+
                     if($imgAry['delete'] == 1)
                     {
-                        $postData['image']  = "";
+                        $postData['image']  = "";  // Update in DB
+
                         $io                 = new Varien_Io_File();
                         $removeThis         = Mage::getBaseDir('media') . DS . $imgAry['value'];
                         $io->rm($removeThis);  
@@ -127,23 +129,28 @@ class cybercom_banner_Adminhtml_BannersController extends Mage_Adminhtml_Control
                
                     $postData['created_date']=date('Y-m-d H:i:s');
                     $postData['updated_date']=date('Y-m-d H:i:s');
-                    $model->setData($postData);
-                    $model->save();  
+                    $bannerModel->setData($postData);
+                    $bannerModel->save();  
                 }
 
-                $bannerId  = $model->getId();
+                $bannerId  = $bannerModel->getId();
                 if (isset($_FILES) && $_FILES['image']['name']) 
                 {
                     //Remove file from media if already uploaded
+                    // if ($bannerId && isset($postData['image'])) 
                     if ($bannerId && isset($postData['image'])) 
                     {             
                         $io         = new Varien_Io_File();
-                        $removeThis = Mage::getBaseDir('media') . DS . $postData['image'];
+                        if(is_array($postData['image']))
+                            $iname = $postData['image']['value'];
+                        else
+                            $iname = $postData['image'];
+                       $removeThis = Mage::getBaseDir('media')."/banner/".$iname; 
                         $io->rm($removeThis);
                     }
 
                     //Start Image Uploading
-                    $path = Mage::getBaseDir('media') . DS . 'banner' .DS;
+                    $path = Mage::getBaseDir('media').'/banner/';
                     $uploader = new Varien_File_Uploader('image');
                     $uploader->setAllowedExtensions(array('jpg', 'png', 'gif'));
                     $uploader->setAllowRenameFiles(true);
@@ -175,15 +182,15 @@ class cybercom_banner_Adminhtml_BannersController extends Mage_Adminhtml_Control
                     //Store Uploaded Image Path into DB
                     $postImage['banner_id'] = $bannerId;
                     $postImage['image'] = $filename;
-                    $model->setData($postImage);
-                    $model->save();  
+                    $bannerModel->setData($postImage);
+                    $bannerModel->save();  
                 }
                 
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('cybercom_banner')->__('Banner was successfully saved'));
                 //Mage::getSingleton('adminhtml/session')->setFormData(false);
                                       
                 if ($this->getRequest()->getParam('back')) {
-                    $this->_redirect('*/*/edit',array('id' => $model->getId()));
+                    $this->_redirect('*/*/edit',array('id' => $bannerModel->getId()));
                     return;
                 }                
                 $this->_redirect('*/*/');
@@ -209,21 +216,21 @@ class cybercom_banner_Adminhtml_BannersController extends Mage_Adminhtml_Control
      
         // Get id if available
         $bannerId  = $this->getRequest()->getParam('banner_id');
-        $model = Mage::getModel('cybercom_banner/bannerdetail');
+        $bannerModel = Mage::getModel('cybercom_banner/bannerdetail');
 
         try {
             if ($bannerId) {
                 //load banner details
-                $model->load($bannerId);
+                $bannerModel->load($bannerId);
 
                 //remmove banner image from media
-                $postData['image']  = $model->getImage();
+                $postData['image']  = $bannerModel->getImage();
                 $io                 = new Varien_Io_File();
                 $removeThis         = Mage::getBaseDir('media') . DS . $postData['image'];
                 $io->rm($removeThis);
 
                 //Delete record from Banner Table
-                $model->delete();  
+                $bannerModel->delete();  
  
                 Mage::getSingleton('adminhtml/session')->addSuccess($this->__('The Banner has been deleted.'));
                 $this->_redirect('*/*/');

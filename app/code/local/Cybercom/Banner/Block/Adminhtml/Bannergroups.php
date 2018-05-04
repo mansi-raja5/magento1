@@ -5,7 +5,7 @@ class Cybercom_Banner_Block_Adminhtml_Bannergroups extends Mage_Adminhtml_Block_
     public function __construct()
     {
 
-        $this->_blockGroup = 'cybercom_banner';
+        $this->_blockGroup = 'cybercom_bannergroups';
         $this->_controller = 'adminhtml_bannergroups';
         $this->_headerText = "Cybercom Banner Groups Detail";
 

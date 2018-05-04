@@ -1,9 +1,9 @@
 <?php
-class Cybercom_Vendor_Model_Mysql4_Price_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract
+class Cybercom_Banner_Model_Mysql4_Bannergroup_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract
 {
     protected function _construct()
     {  
-        $this->_init('cybercom_vendor/price');
+        $this->_init('cybercom_banner/bannergroup');
     }  
 
 	public function delete()

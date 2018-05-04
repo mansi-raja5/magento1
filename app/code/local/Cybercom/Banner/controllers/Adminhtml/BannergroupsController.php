@@ -31,43 +31,101 @@ class Cybercom_Banner_Adminhtml_BannergroupsController extends Mage_Adminhtml_Co
     public function editAction()
     {  
         $this->_initAction();
+        $groupId = $this->getRequest()->getParam('groupId');
+        try
+        {
+            if($groupId)
+            {
+                $model   = Mage::getModel('cybercom_banner/bannergroup')->load($groupId);
+                if(!$model->getID())
+                {
+                    Mage::getSingleton('adminhtml/session')->addError($this->__('This Group is no longer exists.'));
+                    $this->_redirect('*/*/');
+                    return;
+                }
 
-        // Get id if available
-        $bannerId  = $this->getRequest()->getParam('banner_id');
-        $model = Mage::getModel('cybercom_banner/bannerdetail');
-     
-        if ($bannerId) {
+                //print_r($model->getData());
 
-            // Load record
-            $model->load($bannerId);     
-            // Check if record is loaded
-            if (!$model->getId()) {                    
-                Mage::getSingleton('adminhtml/session')->addError($this->__('This Banner no longer exists.'));
-                $this->_redirect('*/*/');     
-                return;
-            }  
-        }  
-             
-        $this->_title($model->getId() ? $model->getName() : $this->__('New Banner'));
-     
-        $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
-        if (!empty($data)) {
-            $model->setData($data);
-        }  
-     
-        Mage::register('cybercom_banner', $model);
-        Mage::getSingleton('core/session')->setBannerdata($model);
-        //$this->_initAction()
+                Mage::register('bannerGroupData',$model);
+            }
+        }
+        catch (Mage_Core_Exception $e) {
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+        catch (Exception $e) {
+            Mage::getSingleton('adminhtml/session')->addError($this->__('An error occurred.'));
+        }        
+
         $this->loadLayout();
-        $this->_addBreadcrumb($id ? $this->__('Edit Banner') : $this->__('New Banner'), $id ? $this->__('Edit Banner') : $this->__('New Banner'));
+
+        $this->_addBreadcrumb($groupId ? $this->__('Edit Banner') : $this->__('New Banner'), $groupId ? $this->__('Edit Banner') : $this->__('New Banner'));
 
         $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 
-        $this->_addContent($this->getLayout()->createBlock('cybercom_banner/adminhtml_bannergroups_edit_tab_form'));
-        $this->_addLeft($this->getLayout()->createBlock('cybercom_banner/adminhtml_bannergroups_edit_tab_categories'));
+        $this->_addContent($this->getLayout()->createBlock('cybercom_banner/adminhtml_bannergroups_edit'));
+
+        $this->_addLeft($this->getLayout()->createBlock('cybercom_banner/adminhtml_bannergroups_treegroups'));
+        
         $this->renderLayout();        
      
     }
+
+    public function saveAction()
+    {
+        $this->_initAction();
+        $postData = $this->getRequest()->getPost();
+        // echo "<pre>";
+        // print_r($postData);
+        // exit;
+        try
+        {
+            $postGroupId = $postData['group_id'];  // If exist then edit
+            $bannerGroupModel = Mage::getSingleton('cybercom_banner/bannergroup');
+            if($postData){
+                $bannerGroupModel->setData($postData);
+                $bannerGroupModel->save();
+            }
+        }
+        catch (Mage_Core_Exception $e) {
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+        catch (Exception $e) {
+            Mage::getSingleton('adminhtml/session')->addError($this->__('An error occurred while.'));
+        }           
+
+        if (isset($postGroupId) && $postGroupId != '') {
+            $this->_redirect('*/*/edit',array('groupId' => $postGroupId));
+            return;
+        } 
+        $this->_redirect('*/*/');
+        return;
+    } 
+
+    public function deleteAction()
+    {
+        $this->_initAction();
+        $groupId = $this->getRequest()->getParam('groupId');
+        try
+        {
+            if($groupId)
+            {
+                $bannerGroupModel = Mage::getModel('cybercom_banner/bannergroup')->load($groupId);
+                $bannerGroupModel->delete();
+                Mage::getSingleton('adminhtml/session')->addSuccess($this->__('The Banner has been deleted.'));
+                $this->_redirect('*/*/');
+                return;                
+            }        
+            return;
+        }
+        catch (Mage_Core_Exception $e) {
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+        catch (Exception $e) {
+            Mage::getSingleton('adminhtml/session')->addError($this->__('An error occurred while deleting this Banner Group.'));
+        }        
+    }
+    
+
     public function customAction()
     {
         $this->getResponse()->setBody(
@@ -101,6 +159,8 @@ class Cybercom_Banner_Adminhtml_BannergroupsController extends Mage_Adminhtml_Co
         $this->_forward('edit');
     }    
     
+
+
 
     /**
      * Check currently called action by permissions for current user
