@@ -1,0 +1,12 @@
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend">
+            <?php echo Mage::helper('cybercom_item')->__('Images') ?>
+        </h4>
+    </div>
+    <fieldset id="item-images-fieldset">
+        <div id="item-images-container" class="images-content">
+            <?php echo $this->getLayout()->createBlock('cybercom_item/Adminhtml_Items_Edit_Tab_Images_Table','Adminhtml.Items.Edit.Tab.Images.Table')->toHtml(); ?>   
+        </div>
+    </fieldset>
+</div>

@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+ 
+<config>
+    <modules>
+        <Cybercom_Item>
+            <version>1.0.2</version>
+        </Cybercom_Item>
+    </modules>
+ 
+    <global>
+        <models>
+            <cybercom_item>
+                <class>Cybercom_Item_Model</class>
+                <resourceModel>cybercom_item_mysql4</resourceModel>
+            </cybercom_item>
+            <cybercom_item_mysql4>
+                <class>Cybercom_Item_Model_Mysql4</class>
+                <entities>
+                    <itemdetail>
+                        <table>cybercom_item_itemdetail</table>
+                    </itemdetail>
+                    <itemimages>
+                        <table>cybercom_item_itemimages</table>
+                    </itemimages>                    
+                </entities>
+            </cybercom_item_mysql4>             
+        </models>
+ 
+        <resources>
+            <cybercom_item_setup>
+                <setup>
+                    <module>Cybercom_Item</module>
+                </setup>
+            </cybercom_item_setup>
+        </resources>
+
+        <blocks>
+            <cybercom_item>
+                <class>Cybercom_Item_Block</class>
+            </cybercom_item>
+        </blocks>
+ 
+        <helpers>
+            <cybercom_item>
+                <class>Cybercom_Item_Helper</class>
+            </cybercom_item>
+        </helpers>
+    </global>
+ 
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <cybercom_item before="Mage_Adminhtml">Cybercom_Item_Adminhtml</cybercom_item>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>   
+
+    <adminhtml>
+        <layout>
+            <updates>
+                <Cybercom_Item>
+                    <file>cybercom_item.xml</file>
+                </Cybercom_Item>
+            </updates>
+        </layout>
+    </adminhtml>
+</config>

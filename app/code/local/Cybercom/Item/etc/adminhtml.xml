@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+ 
+<config>
+    <menu>
+        <Cybercom module="cybercom_item">
+            <children>
+                <item module="cybercom_item">
+                    <title>Manage Items</title>
+                    <sort_order>6</sort_order>
+                    <action>adminhtml/items/</action>
+                </item>                
+            </children>            
+        </Cybercom>        
+    </menu>
+</config>
