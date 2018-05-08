@@ -1,27 +1,15 @@
-<div class="categories-side-col">
-    <div class="content-header">
-        <h3 class="icon-head head-categories"><?php echo Mage::helper('cybercom_banner')->__('Banner Groups') ?></h3>   
-        <button id="add_root_category_button" title="Add Root Category" type="button" class="scalable add" onclick="javascript : window.location ='<?php echo $this->getNewGroupUrl() ?>'" style="">
-        <span>Add New Group</span>
-        </button>
-        <?php //if ($this->getRoot()): ?>
-            <?php //echo $this->getAddRootButtonHtml() ?><br />
-            <?php //echo $this->getAddSubButtonHtml() ?>
-        <?php //endif; ?>
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend">
+            <?php echo Mage::helper('cybercom_banner')->__('Banner Groups') ?>
+        </h4>
     </div>
-    <?php echo $this->getStoreSwitcherHtml();?>
-    <div class="tree-actions">
-        <?php if($this->getRoot()): ?>
-            <?php //echo $this->getCollapseButtonHtml() ?>
-            <?php //echo $this->getExpandButtonHtml() ?>
-            <a href="" onclick="tree.collapseTree(); return false;"><?php echo Mage::helper('catalog')->__('Collapse All'); ?></a> <span class="separator">|</span> <a href="#" onclick="tree.expandTree(); return false;"><?php echo Mage::helper('catalog')->__('Expand All'); ?></a>
-        <?php endif; ?>
-    </div>
-    <?php if ($this->getRoot()): ?>
-    <div class="tree-holder">
-        <div id="tree-div" style="width:100%; overflow:auto;"></div>
-    </div>
+    <fieldset id="grop_fields">
+        <input type="hidden" name="category_ids" id="groups_categories" value="<?php echo $this->getIdsString() ?>">
+        <div id="groups-categories" class="tree"></div>
+    </fieldset>
 </div>
+<?php if($this->getRootNode() && $this->getRootNode()->hasChildren()): ?>
 <script type="text/javascript">
 //<![CDATA[
 var tree;
@@ -147,6 +135,7 @@ Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
 
     categoryClick : function(node, e)
     {
+        debugger;
         var baseUrl = '<?php echo $this->getEditUrl() ?>';
         var urlExt  = 'groupId/'+node.id+'/';
         var url     = parseSidUrl(baseUrl, urlExt);

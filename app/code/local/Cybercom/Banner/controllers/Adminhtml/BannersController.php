@@ -336,6 +336,16 @@ class cybercom_banner_Adminhtml_BannersController extends Mage_Adminhtml_Control
             ->toHtml()
         );
     }
+
+    public function bannergroupbAction(){
+        $this->_initGroups();
+        $this->getResponse()->setBody(
+            $this->getLayout()->createBlock('cybercom_banner/adminhtml_Banners_edit_tab_groupsb')
+            ->setUseAjax(true)
+            ->toHtml()
+        );
+        
+    }    
     public function categoriesJsonAction(){
         $this->_initGroups();
         $this->getResponse()->setBody(

@@ -29,6 +29,14 @@ class Cybercom_Banner_Block_Adminhtml_Banners_Edit_Tabs extends Mage_Adminhtml_B
             'url'       => $this->getUrl('*/*/bannergroup', array('_current'=>true)),   
             'active'    => Mage::getSingleton('core/session')->getActiveTab()=='banner_groups'?true:false         
         ));
+
+        $this->addTab('banner_groupsb',array(
+            'label'     => Mage::helper('cybercom_banner')->__('Banner Groups Again'),
+            'title'     => Mage::helper('cybercom_banner')->__('Banner Groups Again'),
+            'class'     => 'ajax',
+            'url'       => $this->getUrl('*/*/bannergroupb', array('_current'=>true)),   
+            'active'    => Mage::getSingleton('core/session')->getActiveTab()=='banner_groupsb'?true:false         
+        ));        
        
         $this->_updateActiveTab();     
         return parent::_beforeToHtml();
