@@ -62,4 +62,10 @@ class Cybercom_Skeleton_Adminhtml_SkeletonController extends Mage_Adminhtml_Cont
                 ->_addContent($this->getLayout()->createBlock('cybercom_skeleton/adminhtml_jsdemo'))
                 ->renderLayout();        
     }
+
+    public function ajaxAction(){
+        $this   ->loadLayout()
+                ->_addContent($this->getLayout()->createBlock('cybercom_skeleton/adminhtml_ajax'))
+                ->renderLayout();        
+    }    
 }

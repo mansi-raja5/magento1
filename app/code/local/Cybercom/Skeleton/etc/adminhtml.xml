@@ -23,6 +23,11 @@
                             <sort_order>7</sort_order>
                             <action>adminhtml/skeleton/jsdemo</action>
                         </jsdemo> 
+                        <ajax module="cybercom_skeleton">
+                            <title>AJAX</title>
+                            <sort_order>7</sort_order>
+                            <action>adminhtml/skeleton/ajax</action>
+                        </ajax>                         
                     </children>
                 </item>                
             </children>            
