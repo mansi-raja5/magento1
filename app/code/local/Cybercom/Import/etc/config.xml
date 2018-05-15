@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Cybercom_Import>
+            <version>0.1.1</version>
+        </Cybercom_Import>
+    </modules>
+    <frontend>
+        <routers>
+            <import>
+                <use>standard</use>
+                <args>
+                    <module>Cybercom_Import</module>
+                    <frontName>import</frontName>
+                </args>
+            </import>
+        </routers>
+    </frontend>
+    <admin>
+        <routers>
+            <import>
+                <use>admin</use>
+                <args>
+                    <module>Cybercom_Import</module>
+                    <frontName>import</frontName>
+                </args>
+            </import>
+        </routers>
+    </admin>
+    <adminhtml>
+        <menu>
+            <Cybercom module="import">
+                <children>
+                    <import module="import">
+                        <title>Import / Export</title>    
+                        <sort_order>7</sort_order>        
+                        <children>
+                            <manage-import-type module="import">
+                                <title>Manage Import Type</title>
+                                <sort_order>50</sort_order>
+                                <action>import/adminhtml_type</action>
+                            </manage-import-type>                    
+                        </children>
+                    </import>
+                </children>
+            </Cybercom>
+        </menu>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <import translate="title">
+                            <title>Import / Export</title>
+                            <sort_order>71</sort_order>
+                            <children>
+                                <manage-import-type>
+                                    <title>Manage Import Type</title>
+                                    <sort_order>31</sort_order>
+                                </manage-import-type>
+                            </children>
+                        </import>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <import>
+                                            <title>Import Product</title>
+                                        </import>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>   
+    <global>
+        <models>
+            <import>
+                <class>Cybercom_Import_Model</class>
+                <resourceModel>import_mysql4</resourceModel>    
+            </import>
+            <import_mysql4>
+                <class>Cybercom_Import_Model_Mysql4</class>
+                <entities>
+                    <import_process>
+                        <table>import_process</table>
+                    </import_process>
+                    <import_type>
+                        <table>import_process_type</table>
+                    </import_type>                    
+                    <import_report>
+                        <table>import_report</table>
+                    </import_report>
+                </entities>
+            </import_mysql4> 
+        </models>
+        <resources>
+            <import_setup>
+                <setup>
+                    <module>Cybercom_Import</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </import_setup>
+            <import_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </import_write>
+            <import_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </import_read>
+        </resources>
+        <blocks>
+            <import>
+                <class>Cybercom_Import_Block</class>
+            </import>
+        </blocks>
+        <helpers>
+            <import>
+                <class>Cybercom_Import_Helper</class>
+            </import>
+        </helpers>
+    </global>
+</config>

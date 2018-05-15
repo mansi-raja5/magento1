@@ -1,0 +1,75 @@
+<div class="content-header">
+    <table cellspacing="0">
+        <tbody>
+            <tr>
+                <td style="width:50%;"><h3 class="icon-head head-adminhtml-import">Processing Import for <?php echo $this->getEntityTypeForImportProcess(); ?></h3></td>
+                <td class="form-buttons"><button onclick="setLocation('<?php echo $this->getBackUrl(); ?>')" class="scalable back" type="button" title="Back" id="id_0a5cb289f51fcdc623cdcb3d42950616"><span><span><span>Back</span></span></span></button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<?php $totalChunkData = $this->getTotalChunkCount(); ?>
+<?php $currentRequestCount = $this->getCurrentRequestCount(); ?>
+
+<p class="note">
+    <div id="messages">
+        <ul class="messages" id="messages_ul">
+            <li class="notice-msg">
+                <ul>
+                    <li>
+                        <span>Please don't refresh page when importing products.</span>
+                        <span>This will process total <?php echo $totalChunkData; ?> Request to Import <?php echo $this->getEntityTypeForImportProcess();?> Data.</span>
+                    </li>
+                </ul>
+            </li>
+            
+            <?php if($totalChunkData): ?>
+            <div id="process-requests">
+                <div id="Process-request-count-<?php echo $currentRequestCount; ?>">
+                    <li class="processing-msg">
+                        <ul>
+                            <li>
+                                <img height="16px" src="<?php echo $this->getSkinUrl('images/ajax-loader-tr.gif');?>"/><span>Started Execution of <?php echo $currentRequestCount; ?>/<?php echo $totalChunkData; ?> Import process.<span>
+                            </li>
+                        </ul>
+                    </li>
+                </div>
+            </div>
+            <?php endif; ?>
+        </ul>
+    </div>
+</p>
+
+<div id="messages">
+    <ul class="messages" id="notice-msg">
+        <li class="success-msg"  style="display: none;">
+            <ul >
+                <li>
+                    <div id="product-import"></div>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<script type="text/javascript">
+    <?php if($totalChunkData): ?>
+        var setting = {
+            currentRequest: <?php echo $currentRequestCount; ?>,
+            totalRequest: <?php echo $totalChunkData; ?>,
+            importUrl: "<?php echo $this->getImportUrl(); ?>",
+            backUrl: "<?php echo Mage::helper("adminhtml")->getUrl("import/adminhtml_type/index"); ?>",
+            formKey: "<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>"
+        };
+        
+        var processImport = new IMPORT_PROCESS(setting);
+        processImport.processImport();
+        <?php endif; ?>
+</script>
+
+<style>
+ 
+.processing-msg { background:#fff4e9; border: 1px solid #f1af73; color: #d85909; font-size:0.95em; font-weight: bold; padding:8px 8px 2px 8px !important; min-height:23px;}
+.processing-msg img { vertical-align:middle; margin-right:10px; height: 16px !important;}
+</style>
