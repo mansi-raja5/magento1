@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_skeleton_jsdemo>
+        <reference name="head">
+	        <action method="addJs"><script>cybercom_skeleton/jquery-1.12.4.js</script></action>
+	        <action method="addJs"><script>cybercom_skeleton/Furnique.js</script></action>
+	        <action method="addJs"><script>cybercom_skeleton/Jsdemo.js</script></action>
+        </reference>
+    </adminhtml_skeleton_jsdemo>
+</layout>

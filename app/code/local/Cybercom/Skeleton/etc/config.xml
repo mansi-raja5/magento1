@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Cybercom_Skeleton>
+            <version>1.0.0</version>
+        </Cybercom_Skeleton>
+    </modules>
+    <global>
+        <blocks>
+            <cybercom_skeleton>
+                <class>Cybercom_Skeleton_Block</class>
+            </cybercom_skeleton>
+        </blocks>
+        <helpers>
+            <cybercom_skeleton>
+                <class>Cybercom_Skeleton_Helper</class>
+            </cybercom_skeleton>
+        </helpers>
+    </global> 
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <cybercom_skeleton before="Mage_Adminhtml">Cybercom_Skeleton_Adminhtml</cybercom_skeleton>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>   
+    <adminhtml>
+        <layout>
+            <updates>
+                <Cybercom_Skeleton>
+                    <file>cybercom_skeleton.xml</file>
+                </Cybercom_Skeleton>
+            </updates>
+        </layout>
+    </adminhtml>
+</config>
