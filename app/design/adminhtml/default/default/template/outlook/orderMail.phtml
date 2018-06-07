@@ -1,0 +1,28 @@
+<?php 
+// $order = $this->getOrder();
+$orderId 	 = $this->getRequest()->getParam("order_id");
+$orderModel  = Mage::getModel('sales/order')->load($orderId);
+$incrementId = $orderModel->getIncrement_id();
+?>
+
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head"><?php echo $this->__('Outlook Mail List') ?></h4>
+    </div>
+    <fieldset>
+        <div id="outlook_custom_block">
+            <div  id="mail-list">
+				<!-- Here Mail List will be rendered -->
+			</div>
+        </div>
+    </fieldset>
+</div>
+<div class="clear"></div>
+
+<script type="text/javascript">
+	var mailData = new  Furnique.Method();
+	mailData.showLoader();
+	mailData.setUseType('url').setRequestType('get').setData().setURL('<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/index/listmail/orderid/'.$incrementId); ?>').loadPage();
+
+	
+</script>

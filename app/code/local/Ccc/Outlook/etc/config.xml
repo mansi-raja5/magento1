@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Ccc_Outlook>
+            <version>0.1.4</version>
+        </Ccc_Outlook>
+    </modules>
+    <global>
+       <models>
+            <outlook>
+                <class>Ccc_Outlook_Model</class>
+                <resourceModel>outlook_mysql4</resourceModel>
+            </outlook>
+            <outlook_mysql4>
+                <class>Ccc_Outlook_Model_Mysql4</class>
+                <entities>
+                    <ordermail>
+                        <table>ccc_order_mail</table>
+                    </ordermail>
+                    <mailattachment>
+                        <table>ccc_order_mail_attachment</table>
+                    </mailattachment>                    
+                </entities>
+            </outlook_mysql4>             
+        </models>
+
+        <resources>
+            <outlook_setup>
+                <setup>
+                    <module>Ccc_Outlook</module>
+                </setup>
+            </outlook_setup>
+        </resources>   
+
+        <blocks>
+            <outlook>
+                <class>Ccc_Outlook_Block</class>
+            </outlook>
+        </blocks>
+ 
+        <helpers>
+            <outlook>
+                <class>Ccc_Outlook_Helper</class>
+            </outlook>
+        </helpers>
+    </global>
+
+    <adminhtml>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <outlook translate="title" module="outlook">
+                                            <title>Outlook</title>
+                                        </outlook>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+    <frontend>
+        <routers>
+            <outlook>
+                <use>standard</use>
+                <args>
+                    <module>Ccc_Outlook</module>
+                    <frontName>ipn</frontName>
+                </args>
+            </outlook>
+        </routers>
+    </frontend>    
+
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <outlook before="Mage_Adminhtml">Ccc_Outlook_Adminhtml</outlook>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+
+    <adminhtml>
+        <layout>
+            <updates>
+                <outlook>
+                    <file>ccc_outlook.xml</file>
+                </outlook>
+            </updates>
+        </layout> 
+
+        <events>
+            <!-- <core_layout_block_create_after>
+                <observers>
+                    <outlook_ordergrid_add_columns>
+                        <class>Ccc_Outlook_Model_Observer</class>
+                        <method>addColumnsToGrid</method>
+                    </outlook_ordergrid_add_columns>
+                </observers>
+            </core_layout_block_create_after>
+
+            <sales_order_grid_collection_load_before>
+                <observers>
+                    <outlook_ordergrid_prepare_collection>
+                        <class>Ccc_Outlook_Model_Observer</class>
+                        <method>prepareOrderGridCollection</method>
+                    </outlook_ordergrid_prepare_collection>
+                </observers>
+            </sales_order_grid_collection_load_before>    -->       
+        </events>        
+    </adminhtml>  
+
+    <crontab>
+        <jobs>
+            <outlook_readmail>
+                <schedule><cron_expr>*/13 * * * *</cron_expr></schedule>
+                <run><model>outlook/observer::readMail</model></run>
+            </outlook_readmail>
+            <outlook_token_refresh>
+                <schedule><cron_expr>*/13 * * * *</cron_expr></schedule>
+                <run><model>outlook/observer::tokenRefresh</model></run>
+            </outlook_token_refresh>   
+            <outlook_download_attachments>
+                <schedule><cron_expr>*/13 * * * *</cron_expr></schedule>
+                <run><model>outlook/observer::downloadAttachments</model></run>
+            </outlook_download_attachments>
+            <outlook_process_pending_emails>
+                <schedule><cron_expr>* * * * *</cron_expr></schedule>
+                <run><model>outlook/order_observer::processPendingEmails</model></run>
+            </outlook_process_pending_emails>      
+        </jobs>
+    </crontab>    
+</config>

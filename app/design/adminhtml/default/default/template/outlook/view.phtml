@@ -1,0 +1,44 @@
+<div>
+	<button onclick = "redirectThis('<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/index/outlooklogin"); ?>')">Login</button>
+
+	<button onclick = "callURL('<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/index/refreshtoken/'); ?>')">Refresh Token</button>	
+
+	<button onclick = "callURL('<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/index/readmail/'); ?>')">Read Mail</button>
+
+	<button onclick = "callURL('<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/index/getmfr/'); ?>')">Get MFR</button>
+	
+	<button onclick = "callURL('<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/index/downloadattchment/'); ?>')">Download Attachment</button>
+
+	<button onclick = "callURL('<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/index/listmail/orderid/'.$this->getRequest()->getParam("orderid")); ?>')">List Mail</button>
+
+	<button onclick = "callURL('<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/index/truncate/'); ?>')">Truncate</button>
+
+	<button onclick = "callURL('<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/index/getordertatus/orderid/'.$this->getRequest()->getParam("orderid")); ?>')">Get Order Status</button>	
+
+	<?php if(Mage::getStoreConfig('outlook/outlook_group/outlook_automail')): ?>
+		<button onclick = "callURL('<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/index/automail/'); ?>')">Send Auto Mail</button>
+	<?php endif; ?>
+
+</div>	
+
+<div id="response-area-div">
+	<!-- Response Area Div-->
+</div>
+
+<div  id="mail-list">
+	<!-- Here Mail List will be rendered -->
+</div>
+
+<script type="text/javascript">	
+	var mailData = new  Furnique.Method();
+	mailData.loaderElementId = 'loading-mask';
+
+	function redirectThis(url){		
+		window.location = url;		
+	}
+
+	function callURL(url) {
+		mailData.showLoader();
+		mailData.setUseType('url').setRequestType('get').setData().setURL(url).loadPage();
+	}
+</script>

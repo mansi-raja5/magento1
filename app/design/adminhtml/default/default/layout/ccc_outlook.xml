@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_index_view>
+        <reference name="head">
+            <!-- <action method="addJs"><script>mage/adminhtml/priceUpdate/mansi.js</script></action> -->
+        </reference>
+    </adminhtml_index_view> 
+    <adminhtml_sales_order_view>
+        <reference name="order_tab_info">
+            <block type="outlook/adminhtml_sales_order_view_info_block" name="outlook.order.info.ordermail.block" template="outlook/orderMail.phtml" after="mfr_details"/>
+        </reference>
+    </adminhtml_sales_order_view>    
+</layout>
